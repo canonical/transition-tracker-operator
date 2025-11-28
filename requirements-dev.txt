@@ -2,6 +2,8 @@
 #    uv pip compile --no-cache --all-extras pyproject.toml -o requirements-dev.txt
 annotated-types==0.7.0
     # via pydantic
+charmlibs-apt==1.0.0.post0
+    # via transition-tracker-operator (pyproject.toml)
 coverage==7.12.0
     # via transition-tracker-operator (pyproject.toml)
 importlib-metadata==8.7.0
@@ -9,7 +11,9 @@ importlib-metadata==8.7.0
 iniconfig==2.3.0
     # via pytest
 opentelemetry-api==1.38.0
-    # via ops
+    # via
+    #   charmlibs-apt
+    #   ops
 ops==3.3.1
     # via
     #   transition-tracker-operator (pyproject.toml)

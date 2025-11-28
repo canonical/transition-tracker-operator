@@ -10,9 +10,9 @@ from pathlib import Path
 from subprocess import PIPE, STDOUT, CalledProcessError, run
 from urllib.parse import urlparse
 
-import charms.operator_libs_linux.v0.apt as apt
 import charms.operator_libs_linux.v1.systemd as systemd
-from charms.operator_libs_linux.v0.apt import PackageError, PackageNotFoundError
+from charmlibs import apt
+from charmlibs.apt import PackageError, PackageNotFoundError
 
 logger = logging.getLogger(__name__)
 

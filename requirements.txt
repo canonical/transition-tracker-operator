@@ -2,10 +2,14 @@
 #    uv pip compile --no-cache pyproject.toml -o requirements.txt
 annotated-types==0.7.0
     # via pydantic
+charmlibs-apt==1.0.0.post0
+    # via transition-tracker-operator (pyproject.toml)
 importlib-metadata==8.7.0
     # via opentelemetry-api
 opentelemetry-api==1.38.0
-    # via ops
+    # via
+    #   charmlibs-apt
+    #   ops
 ops==3.3.1
     # via transition-tracker-operator (pyproject.toml)
 pydantic==2.12.4
