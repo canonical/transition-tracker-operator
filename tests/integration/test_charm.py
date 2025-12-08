@@ -13,7 +13,7 @@ def deploy_wait_func(status):
     """Wait on juju status until deployed and started."""
     all_maint = jubilant.all_maintenance(status)
     started = status.apps[APPNAME].app_status.message == "Starting transition"
-    ready = (all_maint and started)
+    ready = all_maint and started
     logging.debug(f"all_maint: {all_maint}")
     logging.debug(f"started: {started}")
     return ready
@@ -28,8 +28,9 @@ def test_deploy(juju: jubilant.Juju, transition_tracker_charm):
     """Deploy the charm via jubilant and wait until it fully completed."""
     juju.deploy(transition_tracker_charm, app=APPNAME)
     juju.wait(deploy_wait_func, timeout=600)
-    wait_oneshot_finished(juju, unit="transition-tracker/0",
-                          service="ubuntu-transition-tracker.service")
+    wait_oneshot_finished(
+        juju, unit="transition-tracker/0", service="ubuntu-transition-tracker.service"
+    )
 
 
 @retry(retry_num=10, retry_sleep_sec=3)

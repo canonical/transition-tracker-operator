@@ -25,16 +25,18 @@ def deploy_ha_wait_func(status):
 def test_deploy(juju: jubilant.Juju, transition_tracker_charm):
     """Deploy the charm along haproxy and wait until it fully completed."""
     juju.deploy(transition_tracker_charm, app=APPNAME)
-    juju.deploy(HAPROXY, channel="2.8/edge",
-                config={"external-hostname": "transition-tracker.internal"})
+    juju.deploy(
+        HAPROXY, channel="2.8/edge", config={"external-hostname": "transition-tracker.internal"}
+    )
     juju.deploy(SSC, channel="1/edge")
 
     juju.integrate(APPNAME, HAPROXY)
     juju.integrate(f"{HAPROXY}:certificates", f"{SSC}:certificates")
 
     juju.wait(deploy_ha_wait_func, timeout=1800)
-    wait_oneshot_finished(juju, unit="transition-tracker/0",
-                          service="ubuntu-transition-tracker.service")
+    wait_oneshot_finished(
+        juju, unit="transition-tracker/0", service="ubuntu-transition-tracker.service"
+    )
 
 
 @retry(retry_num=24, retry_sleep_sec=5)
