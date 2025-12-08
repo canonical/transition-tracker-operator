@@ -1,12 +1,13 @@
 # Copyright 2025 Canonical
 # See LICENSE file for licensing details.
 
-import jubilant
 import logging
 import sys
+
+import jubilant
 from requests import Session
 
-from . import HAPROXY, APPNAME, SSC, DNSResolverHTTPSAdapter, retry, wait_oneshot_finished
+from . import APPNAME, HAPROXY, SSC, DNSResolverHTTPSAdapter, retry, wait_oneshot_finished
 
 
 def deploy_ha_wait_func(status):

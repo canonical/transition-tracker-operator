@@ -1,10 +1,11 @@
 # Copyright 2025 Canonical
 # See LICENSE file for licensing details.
 
-import jubilant
 import logging
-import requests
 import sys
+
+import jubilant
+import requests
 
 from . import APPNAME, retry, wait_oneshot_finished
 
