@@ -8,7 +8,7 @@ and do not attempt to manipulate the underlying machine.
 """
 
 from subprocess import CalledProcessError
-from unittest.mock import patch
+from unittest.mock import PropertyMock, patch
 
 import pytest
 from charmlibs.apt import PackageError, PackageNotFoundError
@@ -110,7 +110,7 @@ def test_config_changed_failed_bad_config(configure_mock, ctx, base_state):
 @patch("charm.Transition.start")
 def test_start_success(start_mock, ctx, base_state):
     out = ctx.run(ctx.on.start(), base_state)
-    assert out.unit_status == ActiveStatus()
+    assert out.unit_status == ActiveStatus("Generating transitions report")
     assert start_mock.called
     assert out.opened_ports == {TCPPort(port=80, protocol="tcp")}
 
@@ -132,6 +132,22 @@ def test_transition_refresh_success(refresh_report_mock, ctx, base_state):
     assert ctx.action_logs == ["Refreshing the report"]
     assert out.unit_status == ActiveStatus()
     assert refresh_report_mock.called
+
+
+@patch("charm.Transition.updating", new_callable=PropertyMock)
+def test_transition_update_status_active(updating_mock, ctx, base_state):
+    updating_mock.return_value = True
+    out = ctx.run(ctx.on.update_status(), base_state)
+    assert out.unit_status == ActiveStatus("Generating transitions report")
+    assert updating_mock.called
+
+
+@patch("charm.Transition.updating", new_callable=PropertyMock)
+def test_transition_update_status_waiting(updating_mock, ctx, base_state):
+    updating_mock.return_value = False
+    out = ctx.run(ctx.on.update_status(), base_state)
+    assert out.unit_status == ActiveStatus()
+    assert updating_mock.called
 
 
 @patch("charm.Transition.refresh_report")

@@ -30,6 +30,7 @@ class UbuntuTransitionCharm(ops.CharmBase):
 
         self.framework.observe(self.on.install, self._on_install)
         self.framework.observe(self.on.start, self._on_start)
+        self.framework.observe(self.on.update_status, self._on_update_status)
         self.framework.observe(self.on.upgrade_charm, self._on_install)
         self.framework.observe(self.on.config_changed, self._on_config_changed)
         self.framework.observe(self.on.refresh_action, self._on_refresh_report)
@@ -66,13 +67,20 @@ class UbuntuTransitionCharm(ops.CharmBase):
         self.unit.status = ops.MaintenanceStatus("Starting transition")
         try:
             self._transition.start()
+            self.unit.status = ops.ActiveStatus("Generating transitions report")
         except CalledProcessError:
             self.unit.status = ops.BlockedStatus(
                 "Failed to start services. Check `juju debug-log` for details."
             )
             return
         self.unit.set_ports(PORT)
-        self.unit.status = ops.ActiveStatus()
+
+    def _on_update_status(self, event: ops.UpdateStatusEvent):
+        """Reflecting the status of the systemd service."""
+        if self._transition.updating:
+            self.unit.status = ops.ActiveStatus("Generating transitions report")
+        else:
+            self.unit.status = ops.ActiveStatus()
 
     def _on_config_changed(self, event):
         """Update configuration."""

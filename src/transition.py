@@ -150,6 +150,11 @@ class Transition:
             logger.error("Failed to start systemd service: %s", e)
             raise
 
+    @property
+    def updating(self) -> bool:
+        """Report whether the transition tracker is currently being updated."""
+        return systemd.service_running("ubuntu-transition-tracker.service")
+
     def configure(self, url: str):
         """Configure the charm."""
         logger.debug("The url in use is %s", url)
