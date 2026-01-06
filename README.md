@@ -1,9 +1,10 @@
 # Ubuntu Transition Tracker Operator
 
 
-**Ubuntu  Transition Tracker Operator** is a [charm](https://juju.is/charms-architecture) for deploying an Ubuntu transition tracker environment.
+**Ubuntu Transition Tracker Operator** is a [charm](https://juju.is/charms-architecture) for deploying an Ubuntu transition tracker environment.
 
-This reposistory contains the code for the charm, the application is coming from the `ben` package and the [configs repository](https://git.launchpad.net/~ubuntu-transition-trackers/ubuntu-transition-tracker/+git/configs).
+This repository contains the code for the charm, the application is coming from the `ben` package and the [configs repository](ht
+tps://git.launchpad.net/~ubuntu-transition-trackers/ubuntu-transition-tracker/+git/configs).
 
 ## Basic usage
 
@@ -16,7 +17,7 @@ Assuming you have access to a bootstrapped [Juju](https://juju.is) controller, y
 Once the charm is deployed, you can check the status with Juju status:
 
 ```bash
-❯ $ juju status
+❯ juju status
 Model        Controller  Cloud/Region         Version  SLA          Timestamp
 welcome-lxd  lxd         localhost/localhost  3.6.7    unsupported  13:29:50+02:00
 
@@ -35,7 +36,66 @@ On first start up, the charm will install the application and install a systemd 
 To refresh the report, you can use the provided Juju [Action](https://documentation.ubuntu.com/juju/3.6/howto/manage-actions/):
 
 ```bash
-❯ juju run ubuntu-transition-tracker/0 refresh"
+❯ juju run ubuntu-transition-tracker/0 refresh
+```
+
+## Integrating with an ingress / proxy
+
+The charm supports integrations with ingress/proxy services using the `ingress` relation. To test this:
+
+```bash
+# Deploy the charms
+❯ juju deploy ubuntu-transition-tracker
+❯ juju deploy haproxy --channel 2.8/edge --config external-hostname=transitions.internal
+❯ juju deploy self-signed-certificates --channel 1/edge
+
+# Create integrations
+❯ juju integrate ubuntu-transition-tracker haproxy
+❯ juju integrate haproxy:certificates self-signed-certificates:certificates
+
+# Test the proxy integration
+❯ curl -k -H "Host: transitions.internal" https://<haproxy-ip>/<model-name>-ubuntu-transition-tracker
+```
+
+## Testing
+
+There are unit tests which can be run directly without influence to
+the system and dependencies handled by uv.
+
+```bash
+❯ make unit
+```
+
+Furthermore there are integration tests. Those could be run directly,
+but would the rather invasive juju setup and will via that create and
+destroy units. This can be useful to run in an already established
+virtual environment along CI.
+
+```bash
+❯ make integration
+```
+
+If instead integration tests shall be run, but with isolation.
+[Spread](https://github.com/canonical/spread/blob/master/README.md)
+is configured to create the necessary environment, setup the components needed
+and then run the integration tests in there.
+
+```bash
+❯ charmcraft.spread -v -debug -reuse
+```
+
+For development and debugging it is recommended to select an individual test
+from the list of tests, and run it with
+[`-reuse` for faster setup](https://github.com/canonical/spread/blob/master/README.md#reuse)
+and [`-debug`](https://github.com/canonical/spread/blob/master/README.md#reuse)
+to drop into a shell after an error.
+
+```bash
+❯ charmcraft.spread -list
+lxd:ubuntu-24.04:tests/spread/integration/deploy-charm:juju_3_6
+lxd:ubuntu-24.04:tests/spread/integration/ingress:juju_3_6
+lxd:ubuntu-24.04:tests/spread/unit/transition-tracker
+❯ charmcraft.spread -v -debug -reuse lxd:ubuntu-24.04:tests/spread/integration/deploy-charm:juju_3_6
 ```
 
 ## Contribute to Ubuntu Transition Tracker Operator
