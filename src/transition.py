@@ -144,7 +144,7 @@ class Transition:
         try:
             systemd.service_restart("nginx")
             logger.debug("Nginx service restarted")
-            systemd.service_start("ubuntu-transition-tracker.service")
+            systemd.service_start("--no-block", "ubuntu-transition-tracker.service")
             logger.debug("Ubuntu-transition-tracker service started")
         except CalledProcessError as e:
             logger.error("Failed to start systemd service: %s", e)
