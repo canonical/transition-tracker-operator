@@ -3,8 +3,7 @@
 
 **Ubuntu Transition Tracker Operator** is a [charm](https://juju.is/charms-architecture) for deploying an Ubuntu transition tracker environment.
 
-This repository contains the code for the charm, the application is coming from the `ben` package and the [configs repository](ht
-tps://git.launchpad.net/~ubuntu-transition-trackers/ubuntu-transition-tracker/+git/configs).
+This repository contains the code for the charm, the application is coming from the `ben` package and the [configs repository](https://git.launchpad.net/~ubuntu-transition-trackers/ubuntu-transition-tracker/+git/configs).
 
 ## Basic usage
 
