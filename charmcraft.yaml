@@ -8,14 +8,10 @@ description: |
   a summary page about all the known transitions in the devel series of the Ubuntu archive.
 
 links:
-  website:
-    - https://charmhub.io/ubuntu-transition-tracker
-  issues:
-    - https://github.com/canonical/transition-tracker-operator/issues
-  source:
-    - https://github.com/canonical/transition-tracker-operator
-  documentation:
-    - https://discourse.charmhub.io/t/ubuntu-transition-tracker-documentation/19690
+  website: https://charmhub.io/ubuntu-transition-tracker
+  issues: https://github.com/canonical/transition-tracker-operator/issues
+  source: https://github.com/canonical/transition-tracker-operator
+  documentation: https://discourse.charmhub.io/t/ubuntu-transition-tracker-documentation/19690
 
 
 base: ubuntu@24.04
