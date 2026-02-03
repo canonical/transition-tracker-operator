@@ -2,14 +2,24 @@
 #    uv pip compile --no-cache --all-extras pyproject.toml -o requirements-dev.txt
 annotated-types==0.7.0
     # via pydantic
+certifi==2026.1.4
+    # via requests
 charmlibs-apt==1.0.0.post0
     # via transition-tracker-operator (pyproject.toml)
+charset-normalizer==3.4.4
+    # via requests
 coverage==7.12.0
     # via transition-tracker-operator (pyproject.toml)
+idna==3.11
+    # via requests
 importlib-metadata==8.7.0
     # via opentelemetry-api
 iniconfig==2.3.0
     # via pytest
+jubilant==1.7.0
+    # via transition-tracker-operator (pyproject.toml)
+nodeenv==1.10.0
+    # via pyright
 opentelemetry-api==1.38.0
     # via
     #   charmlibs-apt
@@ -30,12 +40,17 @@ pydantic-core==2.41.5
     # via pydantic
 pygments==2.19.2
     # via pytest
+pyright==1.1.408
+    # via transition-tracker-operator (pyproject.toml)
 pytest==9.0.1
     # via transition-tracker-operator (pyproject.toml)
 pyyaml==6.0.3
     # via
+    #   jubilant
     #   ops
     #   ops-scenario
+requests==2.32.5
+    # via transition-tracker-operator (pyproject.toml)
 ruff==0.14.6
     # via transition-tracker-operator (pyproject.toml)
 typing-extensions==4.15.0
@@ -43,9 +58,12 @@ typing-extensions==4.15.0
     #   opentelemetry-api
     #   pydantic
     #   pydantic-core
+    #   pyright
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
+urllib3==2.6.3
+    # via requests
 websocket-client==1.9.0
     # via ops
 zipp==3.23.0

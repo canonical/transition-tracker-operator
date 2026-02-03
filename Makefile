@@ -21,6 +21,9 @@ format:
 	uv tool run ruff check --fix $(ALL)
 	uv tool run ruff format $(ALL)
 
+static:
+	uv run --all-extras pyright $(ARGS)
+
 unit:
 	uv run --all-extras \
 		coverage run \

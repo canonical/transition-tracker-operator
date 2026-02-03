@@ -39,8 +39,8 @@ class DNSResolverHTTPSAdapter(HTTPAdapter):
 
     def __init__(
         self,
-        hostname,
-        ip,
+        hostname: str,
+        ip: str,
     ):
         """Initialize the dns resolver.
 
@@ -74,20 +74,21 @@ class DNSResolverHTTPSAdapter(HTTPAdapter):
         """
         connection_pool_kwargs = self.poolmanager.connection_pool_kw
 
-        result = urlparse(request.url)
-        if result.hostname == self.hostname:
-            ip = self.ip
-            if result.scheme == "https" and ip:
-                request.url = request.url.replace(
-                    "https://" + result.hostname,
-                    "https://" + ip,
-                )
-                connection_pool_kwargs["server_hostname"] = result.hostname
-                connection_pool_kwargs["assert_hostname"] = result.hostname
-                request.headers["Host"] = result.hostname
-            else:
-                connection_pool_kwargs.pop("server_hostname", None)
-                connection_pool_kwargs.pop("assert_hostname", None)
+        if request.url:
+            result = urlparse(request.url)
+            if result.hostname and result.hostname == self.hostname:
+                ip = self.ip
+                if result.scheme == "https" and ip:
+                    request.url = request.url.replace(
+                        "https://" + result.hostname,
+                        "https://" + ip,
+                    )
+                    connection_pool_kwargs["server_hostname"] = result.hostname
+                    connection_pool_kwargs["assert_hostname"] = result.hostname
+                    request.headers["Host"] = result.hostname
+                else:
+                    connection_pool_kwargs.pop("server_hostname", None)
+                    connection_pool_kwargs.pop("assert_hostname", None)
 
         return super().send(request, stream, timeout, verify, cert, proxies)
 

@@ -9,6 +9,7 @@ dependencies = ["charmlibs-apt~=1.0", "ops", "pydantic"]
 dev = [
     "ops[testing]",
     "coverage[toml]",
+    "pyright",
     "pytest",
     "requests",
     "jubilant",
