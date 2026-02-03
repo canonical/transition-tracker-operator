@@ -8,13 +8,13 @@ description: |
   a summary page about all the known transitions in the devel series of the Ubuntu archive.
 
 links:
-  website:
+  website: |
     - https://charmhub.io/ubuntu-transition-tracker
-  issues:
+  issues: |
     - https://github.com/canonical/transition-tracker-operator/issues
-  source:
+  source: |
     - https://github.com/canonical/transition-tracker-operator
-  documentation:
+  documentation: |
     - https://discourse.charmhub.io/t/ubuntu-transition-tracker-documentation/19690
 
 
