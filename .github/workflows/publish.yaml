@@ -26,7 +26,7 @@ jobs:
         run: charmcraft pack -v
 
       - name: Upload charm artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v5
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v5
         with:
           name: charm
           path: ./*.charm
@@ -46,7 +46,7 @@ jobs:
           persist-credentials: false
 
       - name: Download charm artifact(s)
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
           name: charm
 
@@ -77,7 +77,7 @@ jobs:
         uses: canonical/charming-actions/channel@1753e0803f70445132e92acd45c905aba6473225 # 2.7.0
 
       - name: Download charm artifact(s)
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: charm
 
