@@ -82,50 +82,48 @@ class Transition:
         # Install the deb packages needed for the service
         self._install_packages()
 
-        # do the following steps only once and not again on upgrades
-        if SRVDIR.is_dir():
-            return
+        # Repository bootstrap is a one-time setup.
+        if not SRVDIR.is_dir():
+            # Create the build and log directories
+            for dname in (SRVDIR, MIRROR_DISTS):
+                try:
+                    os.makedirs(dname, exist_ok=True)
+                    logger.debug("Directory %s created", dname)
+                except OSError as e:
+                    logger.warning("Creating directory %s failed: %s", dname, e)
+                    raise
 
-        # Create the build and log directories
-        for dname in (SRVDIR, MIRROR_DISTS):
+            # Clone the config repository
             try:
-                os.makedirs(dname, exist_ok=True)
-                logger.debug("Directory %s created", dname)
-            except OSError as e:
-                logger.warning("Creating directory %s failed: %s", dname, e)
+                run(
+                    [
+                        "git",
+                        "clone",
+                        "-b",
+                        "main",
+                        REPO_URL,
+                        SRVDIR / "config",
+                    ],
+                    check=True,
+                    env=self.env,
+                    stdout=PIPE,
+                    stderr=STDOUT,
+                    text=True,
+                    timeout=300,
+                )
+                logger.debug("Transition config vcs cloned.")
+            except CalledProcessError as e:
+                logger.warning("Git clone of the code failed: %s", e.stdout)
                 raise
 
-        # Clone the config repository
-        try:
-            run(
-                [
-                    "git",
-                    "clone",
-                    "-b",
-                    "main",
-                    REPO_URL,
-                    SRVDIR / "config",
-                ],
-                check=True,
-                env=self.env,
-                stdout=PIPE,
-                stderr=STDOUT,
-                text=True,
-                timeout=300,
-            )
-            logger.debug("Transition config vcs cloned.")
-        except CalledProcessError as e:
-            logger.warning("Git clone of the code failed: %s", e.stdout)
-            raise
-
-        # create that needed directory but it should be in the repository?
-        finisheddir = SRVDIR / "config" / "monitor" / "finished"
-        try:
-            os.makedirs(finisheddir, exist_ok=True)
-            logger.debug("Directory %s created", finisheddir)
-        except OSError as e:
-            logger.warning("Creating directory %s failed: %s", finisheddir, e)
-            raise
+            # create that needed directory but it should be in the repository?
+            finisheddir = SRVDIR / "config" / "monitor" / "finished"
+            try:
+                os.makedirs(finisheddir, exist_ok=True)
+                logger.debug("Directory %s created", finisheddir)
+            except OSError as e:
+                logger.warning("Creating directory %s failed: %s", finisheddir, e)
+                raise
 
         try:
             shutil.copy("src/script/syncmirror", "/usr/bin")
