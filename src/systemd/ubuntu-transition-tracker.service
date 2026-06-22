@@ -5,5 +5,6 @@ Description=Ubuntu Transition Tracker
 Type=oneshot
 # Specifying the user is required, the service errors out without it
 User=root
+ExecStartPre=/bin/rm -f /srv/transitions/transition-tracker/ben.lock
 ExecStartPre=syncmirror
 ExecStart=/srv/transitions/transition-tracker/config/go
