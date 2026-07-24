@@ -31,6 +31,10 @@ REPO_URL = (
 MIRROR_DIR = Path("/srv/mirrors")
 MIRROR_DISTS = MIRROR_DIR / "ubuntu" / "dists"
 
+# ben generates its report in this directory
+WWWDIR = Path("/srv/transitions/www")
+FAVICON_PATH = WWWDIR / "favicon.ico"
+
 NGINX_SITE_CONFIG_PATH = Path("/etc/nginx/conf.d/transition.conf")
 
 
@@ -127,6 +131,9 @@ class Transition:
         try:
             shutil.copy("src/script/syncmirror", "/usr/bin")
             shutil.copy("src/nginx/transition.conf", NGINX_SITE_CONFIG_PATH)
+            # Ben doesn't produce a favicon so adding one for Ubuntu
+            os.makedirs(WWWDIR, exist_ok=True)
+            shutil.copy("src/favicon.ico", FAVICON_PATH)
             logger.debug("App files copied")
         except (OSError, shutil.Error) as e:
             logger.warning("Error copying files: %s", str(e))
